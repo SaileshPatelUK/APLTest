@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Tests/">
+    <Project Path="Tests/APLTechnical.Tests.Bdd/APLTechnical.Tests.Bdd.csproj" Id="39af70a9-aabf-40bb-8db0-fdc298729c3f" />
+    <Project Path="Tests/APLTechnical.Tests.Common/APLTechnical.Tests.Common.csproj" Id="ebd3f487-1f01-4231-bc02-93789aec7346" />
+    <Project Path="Tests/APLTechnical.Tests.Unit/APLTechnical.Tests.Unit.csproj" Id="e207f859-4190-4c7a-8a07-8e6d71138879" />
+  </Folder>
+  <Project Path="APLTechnical.Api/APLTechnical.Api.csproj" Id="78e25c8f-4a76-4cce-a905-370ceb0b1747" />
+  <Project Path="APLTechnical.Core/APLTechnical.Core.csproj" Id="98b6d7e8-fb4c-4dcb-81cd-438b0444d495" />
+  <Project Path="APLTechnical.Infrastructure/APLTechnical.Infrastructure.csproj" Id="ab729ec1-6db8-41b2-a70b-00e176cffa7a" />
+  <Project Path="APLTechnical.Services/APLTechnical.Services.csproj" Id="60ae3b4f-2207-4d31-8bab-9d82f6f91a98" />
+</Solution>
