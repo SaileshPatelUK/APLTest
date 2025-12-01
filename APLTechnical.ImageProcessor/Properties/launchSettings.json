@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "APLTechnical.ImageProcessor": {
-      "commandName": "Project",
-      "commandLineArgs": "--port 7283",
-      "launchBrowser": false
-    }
-  }
-}
