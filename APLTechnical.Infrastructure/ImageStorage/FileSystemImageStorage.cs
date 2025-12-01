@@ -10,7 +10,14 @@ public class FileSystemImageStorage(IConfiguration config) : IImageStorage
     public async Task SaveAsync(string filename, Stream content, CancellationToken cancellationToken = default)
     {
         var fullPath = Path.Combine(_rootPath, filename);
-        Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
+        var dir = Path.GetDirectoryName(fullPath)!;
+
+        // Ensure directory exists
+        if (!Directory.Exists(dir))
+        {
+            Directory.CreateDirectory(dir);
+        }
+
         await using var file = File.Create(fullPath);
         await content.CopyToAsync(file, cancellationToken);
     }
@@ -18,6 +25,13 @@ public class FileSystemImageStorage(IConfiguration config) : IImageStorage
     public Task<Stream> GetAsync(string filename, CancellationToken cancellationToken = default)
     {
         var fullPath = Path.Combine(_rootPath, filename);
+
+        //  check if file exists (recommended)
+        if (!File.Exists(fullPath))
+        {
+            throw new FileNotFoundException($"File not found: {fullPath}");
+        }
+
         Stream stream = File.OpenRead(fullPath);
         return Task.FromResult(stream);
     }

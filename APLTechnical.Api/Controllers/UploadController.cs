@@ -1,4 +1,5 @@
-﻿using APLTechnical.Core.Interfaces;
+﻿using APLTechnical.Core.Extensions;
+using APLTechnical.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,11 +18,13 @@ public class UploadController(IImageService imageService, ILogger<UploadControll
         [FromForm] IFormFile file,
         CancellationToken cancellationToken)
     {
+        // Basic validation
         if (file == null || file.Length == 0)
         {
             return BadRequest("No file uploaded.");
         }
 
+        // Validate file type
         var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
 
         if (extension is not ".png" and not ".jpg" and not ".jpeg")
@@ -33,11 +36,14 @@ public class UploadController(IImageService imageService, ILogger<UploadControll
         {
             _log.LogInformation("UploadImageAsync: received file {FileName} ({Length} bytes)", file.FileName, file.Length);
 
-            // 2. Save the file somewhere (blob, disk, DB, etc.)
             using var stream = file.OpenReadStream();
+            // Validate image dimensions
+            stream.ValidateMaxDimensions();
+
+            // Save the image using the image service
             await _imageService.SaveNewImageAsync(file.FileName, stream, cancellationToken);
 
-            // 3. Return something useful to the client
+            // Return something useful to the client
             return Ok(new
             {
                 fileName = file.FileName,

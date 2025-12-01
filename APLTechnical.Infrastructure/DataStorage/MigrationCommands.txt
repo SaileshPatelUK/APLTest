@@ -1,5 +1,7 @@
 In a Package Manager Console (powershell) window....
 
+create migration
 add-migration "<Migration Name>" -Context AplContext -Project APLTechnical.Infrastructure -StartupProject APLTechnical.Infrastructure
 
+run migrations
 update-database -Context AplContext -Project APLTechnical.Infrastructure -StartupProject APLTechnical.Infrastructure

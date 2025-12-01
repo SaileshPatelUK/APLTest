@@ -1,5 +1,7 @@
 ﻿using APLTechnical.Core.Enums;
+using APLTechnical.Infrastructure.DataStorage;
 using APLTechnical.Infrastructure.DataStorage.Context;
+using APLTechnical.Infrastructure.DataStorage.Interfaces;
 using APLTechnical.Infrastructure.ImageStorage;
 using APLTechnical.Infrastructure.ImageStorage.Interfaces;
 using Azure.Storage.Blobs;
@@ -53,6 +55,9 @@ public static class ServiceRegistrationExtensions
                     $"Unsupported ImageStorageProvider: {provider}")
             };
         });
+
+        // Register other infrastructure services as needed
+        services.AddScoped<IImageRepository, ImageRepository>();
 
         return services;
     }

@@ -1,18 +1,19 @@
 ﻿using APLTechnical.Core.Interfaces;
 using APLTechnical.Core.Models;
+using APLTechnical.Infrastructure.DataStorage.Interfaces;
 using APLTechnical.Infrastructure.ImageStorage.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace APLTechnical.Services;
 
-public class ImageService(IImageStorage imageStorage, ILogger<ImageService> logger) : IImageService
+public class ImageService(IImageStorage imageStorage, IImageRepository imageRepository, ILogger<ImageService> logger) : IImageService
 {
     private readonly IImageStorage _imageStorage = imageStorage;
+    private readonly IImageRepository _imageRepository = imageRepository;
     private readonly ILogger<ImageService> _logger = logger;
 
     public Task<Images> GetNewImageIdAsync(string filename)
     {
-        // your existing implementation
         throw new NotImplementedException();
     }
 
@@ -29,6 +30,12 @@ public class ImageService(IImageStorage imageStorage, ILogger<ImageService> logg
         ArgumentNullException.ThrowIfNull(content);
 
         _logger.LogInformation("Saving new image {FileName}", filename);
+
+        // 1. Save the image using the injected image storage
         await _imageStorage.SaveAsync(filename, content, cancellationToken).ConfigureAwait(false);
+
+        // 2. Save image metadata to database
+        _imageRepository.SaveImageDetailsAsync(filename, filename, "image/jpeg", content.Length, 0, 0, "FileSystem", "system", cancellationToken).Wait(cancellationToken);
+        _logger.LogInformation("Image {FileName} saved successfully", filename);
     }
 }
