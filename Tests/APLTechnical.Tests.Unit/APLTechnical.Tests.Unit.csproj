@@ -28,11 +28,11 @@
 
   <ItemGroup>
     <Folder Include="Api\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\APLTechnical.Infrastructure\APLTechnical.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\APLTechnical.Services\APLTechnical.Services.csproj" />
   </ItemGroup>
 
 </Project>

@@ -36,7 +36,8 @@ public class ImageService(IImageStorage imageStorage, IImageRepository imageRepo
         await _imageStorage.SaveAsync(filename, content, cancellationToken).ConfigureAwait(false);
 
         // 2. Save image metadata to database
-        _imageRepository.SaveImageDetailsAsync(filename, filename, "image/jpeg", content.Length, dimensions!.Value.width, dimensions.Value.height, "FileSystem", "system", cancellationToken).Wait(cancellationToken);
+        await _imageRepository.SaveImageDetailsAsync(filename, filename, "image/jpeg", content.Length, dimensions!.Value.width, dimensions.Value.height, "FileSystem", "system", cancellationToken);
+
         _logger.LogInformation("Image {FileName} saved successfully", filename);
     }
 }
