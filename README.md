@@ -61,7 +61,7 @@ The front end is hosted separately to backend. To run locally, you will need to 
 3. ```npm run dev``` - This will run the react dev server
 4. I've created a launch.json file so, you can just start debugging by using those settings. It will create a new window in Chrome.
 5. Hopefully, you can now see the UI. :)
-![alt text](image.png)
+![alt text](image-1.png)
 
 
 ## Incomplete Work
