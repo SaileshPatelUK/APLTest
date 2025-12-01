@@ -8,12 +8,15 @@ public class AplContextFactory : IDesignTimeDbContextFactory<AplContext>
 {
     public AplContext CreateDbContext(string[] args)
     {
+        var basePath = Path.Combine(Directory.GetCurrentDirectory(), "..", "APLTechnical.Api");
+
         var config = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+            .SetBasePath(basePath)
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
             .Build();
 
-        var connectionString = config.GetConnectionString("APLTechnical:SqlConnectionString");
+        var connectionString = config["APLTechnical:SqlConnectionString"]
+            ?? throw new InvalidOperationException("Connection string not found.");
 
         var optionsBuilder = new DbContextOptionsBuilder<AplContext>();
         optionsBuilder.UseSqlServer(connectionString);

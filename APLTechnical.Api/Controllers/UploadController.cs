@@ -38,10 +38,10 @@ public class UploadController(IImageService imageService, ILogger<UploadControll
 
             using var stream = file.OpenReadStream();
             // Validate image dimensions
-            stream.ValidateMaxDimensions();
+            var (x, y) = stream.ValidateMaxDimensions();
 
             // Save the image using the image service
-            await _imageService.SaveNewImageAsync(file.FileName, stream, cancellationToken);
+            await _imageService.SaveNewImageAsync(file.FileName, stream, (x, y), cancellationToken);
 
             // Return something useful to the client
             return Ok(new

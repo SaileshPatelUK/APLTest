@@ -12,7 +12,6 @@ public class FileSystemImageStorage(IConfiguration config) : IImageStorage
         var fullPath = Path.Combine(_rootPath, filename);
         var dir = Path.GetDirectoryName(fullPath)!;
 
-        // Ensure directory exists
         if (!Directory.Exists(dir))
         {
             Directory.CreateDirectory(dir);
@@ -26,7 +25,6 @@ public class FileSystemImageStorage(IConfiguration config) : IImageStorage
     {
         var fullPath = Path.Combine(_rootPath, filename);
 
-        //  check if file exists (recommended)
         if (!File.Exists(fullPath))
         {
             throw new FileNotFoundException($"File not found: {fullPath}");

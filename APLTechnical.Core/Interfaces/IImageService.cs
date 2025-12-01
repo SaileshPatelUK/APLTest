@@ -8,5 +8,6 @@ public interface IImageService
     Task SaveNewImageAsync(
         string filename,
         Stream content,
+        (int width, int height)? dimensions = null,
         CancellationToken cancellationToken = default);
 }

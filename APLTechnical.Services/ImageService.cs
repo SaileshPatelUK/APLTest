@@ -20,6 +20,7 @@ public class ImageService(IImageStorage imageStorage, IImageRepository imageRepo
     public async Task SaveNewImageAsync(
         string filename,
         Stream content,
+        (int width, int height)? dimensions = null,
         CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(filename))
@@ -35,7 +36,7 @@ public class ImageService(IImageStorage imageStorage, IImageRepository imageRepo
         await _imageStorage.SaveAsync(filename, content, cancellationToken).ConfigureAwait(false);
 
         // 2. Save image metadata to database
-        _imageRepository.SaveImageDetailsAsync(filename, filename, "image/jpeg", content.Length, 0, 0, "FileSystem", "system", cancellationToken).Wait(cancellationToken);
+        _imageRepository.SaveImageDetailsAsync(filename, filename, "image/jpeg", content.Length, dimensions!.Value.width, dimensions.Value.height, "FileSystem", "system", cancellationToken).Wait(cancellationToken);
         _logger.LogInformation("Image {FileName} saved successfully", filename);
     }
 }

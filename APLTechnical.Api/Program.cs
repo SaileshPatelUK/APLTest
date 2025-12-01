@@ -1,4 +1,5 @@
 ﻿using APLTechnical.Api.Extensions;
+using APLTechnical.Api.Middleware;
 using APLTechnical.Infrastructure.Configuration;
 
 namespace APLTechnical.Api;
@@ -45,6 +46,9 @@ public class Program
             {
                 app.MapOpenApi();
             }
+
+            // Exception Middleware
+            app.UseMiddleware<GlobalExceptionMiddleware>();
 
             app.UseHttpsRedirection();
             app.UseCors("AllowVite");
