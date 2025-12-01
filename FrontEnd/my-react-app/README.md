@@ -1,18 +1,66 @@
-# React + Vite
+# APL Technical
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+APLTechnical – Developer Guide
 
-Currently, two official plugins are available:
+This document provides complete setup instructions for:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Running Entity Framework Core migrations
 
-## React Compiler
+- Configuring image storage (FileSystem or Blob Storage)
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- Setting up Azurite (local blob emulator)
 
-Note: This will impact Vite dev & build performances.
+- Adding the required appsettings.json
 
-## Expanding the ESLint configuration
+- Creating and running the React + Vite frontend app
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+# Running Entity Framework Core migrations
+In the APLTechnical.Infrastructure C# Project, I've left instructions on how to add a migration and a command to update the database. The File is MigrationCommands.txt. Amend the value for SqlConnectionString found in the appsettings.json found in the APLTechnical.Api project, then Run the commands in the package manager console.
+
+# Configuring SQL + image storage (FileSystem or Blob Storage)
+To choose the ability to save images either to a FileSystem or Blob Storage, amend the value of ImageStorageProvider in appsettings.json. Possible values are "FileSystem" | "BlobStorage".
+
+# Setting up Azurite (local blob emulator)
+To set up a blob container locally on your machine, you will need to install azurite. Once you have azurite running, create a blob container with a name. Currently, the name of the container the application saves to by default is named "images". You can change that in the BlobStorageConfiguration. Can make changes in the future to make this configurable from either appsettings etc.
+
+```csharp
+public class BlobStorageConfiguration
+{
+    public string ConnectionString { get; set; } = string.Empty;
+    public string ContainerName { get; set; } = "images";
+}
+```
+# Adding the required appsettings.json
+If not found already after downloading this repository, copy this into an appsettings.json file and place in APLTechnical.Api. 
+```json
+{
+  "APLTechnical": {
+    "ImageStorageProvider": "FileSystem", // Options: "FileSystem" | "BlobStorage"
+    "SqlConnectionString": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=apltest;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Application Name=APLTechnicalApi;Command Timeout=30",
+    "BlobStorage": {
+      "ConnectionString": "AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;DefaultEndpointsProtocol=http;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;TableEndpoint=http://127.0.0.1:10002/devstoreaccount1;"
+    },
+    "ImageFileSystemRoot": "C:\\ImageStorage"
+  },
+
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+
+  "AllowedHosts": "*"
+}
+```
+# Running the React + Vite frontend app
+The front end is hosted separately to backend. To run locally, you will need to do the following:
+
+1. ```cd my-react-app``` - Go in to correct route folder (optional)
+2. ```npm run build``` - This will build the code
+3. ```npm run dev``` - This will run the react dev server
+4. I've created a launch.json file so, you can just start debugging by using those settings. It will create a new window in Chrome.
+5. Hopefully, you can now see the UI. :)
+![alt text](image.png)
+
+
