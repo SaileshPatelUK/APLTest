@@ -1,4 +1,5 @@
 ﻿using APLTechnical.Api.Extensions;
+using APLTechnical.Infrastructure.Configuration;
 
 namespace APLTechnical.Api;
 
@@ -15,15 +16,28 @@ public class Program
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // 1. Infrastructure / DI
-            builder.Services.AddAplInfrastructure(builder.Configuration);
+            // Load "AplTechnical" section from appsettings.json
+            var aplSection = builder.Configuration.GetSection("APLTechnical");
 
-            // 2. Logging
+            builder.Services.Configure<AplTechnicalConfiguration>(aplSection);
+
+            builder.Services.AddAplDependencies(builder.Configuration);
+
+            // Logging
             builder.Logging.AddAplLogging();
 
-            // 3. API
+            // API
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    "AllowVite",
+                    policy => policy
+                        .WithOrigins("http://localhost:5173")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+            });
 
             var app = builder.Build();
 
@@ -33,6 +47,7 @@ public class Program
             }
 
             app.UseHttpsRedirection();
+            app.UseCors("AllowVite");
             app.UseAuthorization();
             app.MapControllers();
 

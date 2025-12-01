@@ -1,29 +1,34 @@
-﻿using APLTechnical.Core.Enums;
-using APLTechnical.Core.Interfaces;
+﻿using APLTechnical.Core.Interfaces;
 using APLTechnical.Core.Models;
 using APLTechnical.Infrastructure.ImageStorage.Interfaces;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace APLTechnical.Services;
 
-public class ImageService : IImageService
+public class ImageService(IImageStorage imageStorage, ILogger<ImageService> logger) : IImageService
 {
-    private readonly Func<ImageStorageProvider, IImageStorage> _imageStorageFactory;
-    private readonly ImageStorageProvider _provider;
-
-    public ImageService(
-        Func<ImageStorageProvider, IImageStorage> imageStorageFactory,
-        IConfiguration config)
-    {
-        _imageStorageFactory = imageStorageFactory;
-
-        // e.g. in appsettings.json: "APLTechnical:ImageStorageProvider": "Blob"
-        var providerName = config["APLTechnical:ImageStorageProvider"] ?? "Blob";
-        _provider = Enum.Parse<ImageStorageProvider>(providerName, ignoreCase: true);
-    }
+    private readonly IImageStorage _imageStorage = imageStorage;
+    private readonly ILogger<ImageService> _logger = logger;
 
     public Task<Images> GetNewImageIdAsync(string filename)
     {
+        // your existing implementation
         throw new NotImplementedException();
+    }
+
+    public async Task SaveNewImageAsync(
+        string filename,
+        Stream content,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(filename))
+        {
+            throw new ArgumentException("Filename must be provided.", nameof(filename));
+        }
+
+        ArgumentNullException.ThrowIfNull(content);
+
+        _logger.LogInformation("Saving new image {FileName}", filename);
+        await _imageStorage.SaveAsync(filename, content, cancellationToken).ConfigureAwait(false);
     }
 }

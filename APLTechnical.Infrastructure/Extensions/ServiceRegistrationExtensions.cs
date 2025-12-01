@@ -27,7 +27,6 @@ public static class ServiceRegistrationExtensions
         // Single IImageStorage that chooses based on config
         services.AddTransient<IImageStorage>(sp =>
         {
-            // Try both common keys: "APLTechnical:ImageStorage:Provider" and "APLTechnical:ImageStorageProvider"
             var providerString = aplSection.GetSection("ImageStorage")["Provider"]
                              ?? aplSection["ImageStorageProvider"];
 

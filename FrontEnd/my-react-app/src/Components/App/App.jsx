@@ -1,45 +1,52 @@
-import { useState } from 'react'
-import reactLogo from '../../assets/react.svg'
-import viteLogo from '/vite.svg'
-import '../../css/App.css'
+import { useState } from "react";
+import "../../api/api.js";
+import { uploadFile } from "../../api/api.js";
 
 function App() {
-  const [fileContent, setFileContent] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [status, setStatus] = useState("");
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const file = e.target.files?.[0] || null;
+    setSelectedFile(file);
+    setStatus("");
+  };
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      console.log(reader.result);
-      setFileContent(reader.result);
-    };
-    reader.readAsText(file);
+  const handleSubmit = async () => {
+    if (!selectedFile) {
+      setStatus("Please choose a file first.");
+      return;
+    }
+
+    try {
+      setStatus("Uploading...");
+      const result = await uploadFile(selectedFile);
+      setStatus(`Upload successful ✅ ${JSON.stringify(result)}`);
+    } catch (err) {
+      console.error(err);
+      setStatus("Error: " + err.message);
+    }
   };
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
+      <h1>Upload an Image</h1>
+
       <div className="card">
-      <input type="file" onChange={(e) => console.log(e.target.files[0])} />
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+        <input type="file" onChange={handleFileChange} />
+
+        <button style={{ marginTop: "10px" }} onClick={handleSubmit}>
+          Submit
+        </button>
+
+        {status && <p style={{ marginTop: "10px" }}>{status}</p>}
       </div>
+
       <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
+        Select a file and click submit to upload.
       </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

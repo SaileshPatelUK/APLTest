@@ -5,7 +5,8 @@ namespace APLTechnical.Infrastructure.Configuration;
 public class AplTechnicalConfiguration
 {
     public ImageStorageProvider ImageStorageProvider { get; set; } = 0;
-    public required string SqlConnectionString { get; set; }
+    public string SqlConnectionString { get; set; } = string.Empty;
 
-    public required BlobStorageConfiguration BlobStorage { get; set; }
+    public BlobStorageConfiguration BlobStorage { get; set; } = new BlobStorageConfiguration();
+    public string ImageFileSystemRoot { get; set; } = string.Empty;
 }

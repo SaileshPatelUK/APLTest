@@ -1,17 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using APLTechnical.Core.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace APLTechnical.Services.Extensions;
 
 public static class ServiceRegistrationExtensions
 {
-    public static IServiceCollection AddServiceLayerRegistrations(
+    public static IServiceCollection AddServiceLayerDependencies(
                 this IServiceCollection services)
     {
-        //var aplSection = configuration.GetSection("APLTechnical");
-
         // Service layer service registrations go here
-        services.AddScoped<ImageService>();
+        services.AddScoped<IImageService, ImageService>();
         return services;
     }
 }
