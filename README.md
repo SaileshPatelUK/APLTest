@@ -66,7 +66,7 @@ The front end is hosted separately to backend. To run locally, you will need to 
 
 ## Incomplete Work
 Still yet to complete:
-- Bdd Tests
-- Some Unit Tests
+- Bdd Tests - Initially wanted to create a test framework for bdd tests. When choosing .Net10, I forgot to take in to account that the Reqnroll extension needed to run the tests will need to work with new version of visual studio. So never got around to finishing that. 
+- C# Unit Tests and React Front End Tests. I have written javascript unit tests before using jest. Just haven't found the time to complete this time. 
 - One or two config settings are hard coded including the file types we validate for.
 - Would need some work to get this deployable in to azure like pipelines etc. 
